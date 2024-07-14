@@ -1,0 +1,45 @@
+{% load static %}
+
+<div class="col-lg-4 col-md-5">
+    <div class="blog__sidebar">
+        <div class="blog__sidebar__search">
+            <form action="#">
+                <input type="text" name="query" placeholder="Search...">
+                <button type="submit"><span class="icon_search"></span></button>
+            </form>
+        </div>
+        <div class="blog__sidebar__item">
+            <h4>Categories</h4>
+            <ul>
+                <li><a href="#">All</a></li>
+                {% for cat in category %}
+                <li><a href="?cat={{ cat.slug }}">{{ cat.name }} ({{ cat.blog_set.count }})</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="blog__sidebar__item">
+            <h4>Recent News</h4>
+            <div class="blog__sidebar__recent">
+                {% for recent in recent_blogs %}
+                <a href="{{ recent.get_absolute_url }}" class="blog__sidebar__recent__item">
+                    <div class="blog__sidebar__recent__item__pic">
+                        <img src="{{ recent.image.url }}" alt>
+                    </div>
+                    <div class="blog__sidebar__recent__item__text">
+                        <h6>{{ recent.title }}</h6>
+                        <span>{{ recent.created_at|date }}</span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="blog__sidebar__item">
+            <h4>Search By</h4>
+            <div class="blog__sidebar__item__tags">
+                {% for tag in tags %}
+                <a href="?tag={{ tag.slug }}">{{ tag.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

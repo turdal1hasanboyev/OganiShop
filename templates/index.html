@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<section class="hero">
+  <div class="container">
+    <div class="row">
+      
+      {% include 'categories.html' %}
+
+      <div class="col-lg-9">
+        <div class="hero__search">
+          <div class="hero__search__form">
+            <form action="#">
+              <div class="hero__search__categories">
+                All Categories
+                <span class="arrow_carrot-down"></span>
+              </div>
+              <input type="text" name="query" placeholder="What do yo u need?">
+              <button type="submit" class="site-btn">SEARCH</button>
+            </form>
+          </div>
+          <div class="hero__search__phone">
+            <div class="hero__search__phone__icon">
+              <i class="fa fa-phone"></i>
+            </div>
+            <div class="hero__search__phone__text">
+              <h5>+65 11.188.888</h5>
+              <span>support 24/7 time</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero__item set-bg" data-setbg="{{ banner.image.url }}">
+          <div class="hero__text">
+            <span>{{ banner.category }}</span>
+            <h2>{{ banner.name }}</h2>
+            <p>{{ banner.description|safe|slice:":40" }}</p>
+            <a href="{% url 'index' %}" class="primary-btn">SHOP NOW</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="categories">
+  <div class="container">
+    <div class="row">
+      <div class="categories__slider owl-carousel">
+        {% for cat in categories %}
+        <div class="col-lg-3">
+          <div class="categories__item set-bg"
+            data-setbg="{% if cat.image %} {{ cat.image.url }} {% else %} {% static 'img/dafault_cat.jpg' %} {% endif %}">
+            <h5><a href="?cat={{ cat.slug }}">{{ cat.name }}</a></h5>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="featured spad">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="section-title">
+          <h2>Featured Product</h2>
+        </div>
+        <div class="featured__controls">
+        </div>
+      </div>
+    </div>
+    <div class="row featured__filter">
+      {% for prod in products %}
+      <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
+        <div class="featured__item">
+          <div class="featured__item__pic set-bg" data-setbg="{{ prod.images.first.image.url }}">
+            <ul class="featured__item__pic__hover">
+              <li><a href="{% url 'add_to_wish_list' prod.id %}"><i class="fa fa-heart"></i></a></li>
+              <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+              <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+            </ul>
+          </div>
+          <div class="product__discount__item__text">
+            <span>{{ prod.category.name }}</span>
+            <h5><a href="{% url 'detail' prod.slug %}">{{ prod.name }}</a></h5>
+            {% if prod.percentage %}
+            <div class="product__item__price">${{ prod.discount }} <span>${{ prod.price }}</span></div>
+            {% else %}
+            <div class="product__item__price">${{ prod.price }}</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
+<div class="banner">
+  <div class="container">
+    <div class="row">
+      {% for banner in last_two_banners %}
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="banner__pic">
+          <img src="{{ banner.image.url }}" alt>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+<section class="latest-product spad">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 col-md-6">
+        <div class="latest-product__text">
+          <h4>Latest Products</h4>
+          <div class="latest-product__slider owl-carousel">
+            <div class="latest-prdouct__slider__item">
+              {% for product in last_products|slice:"0:3" %}
+              <a href="{% url 'detail' product.slug %}" class="latest-product__item">
+                <div class="latest-product__item__pic">
+                  <img src="{{ product.images.first.image.url }}" alt>
+                </div>
+                <div class="latest-product__item__text">
+                  <h6>{{ product.name }}</h6>
+                  <span>{{ product.discount }}</span>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+            <div class="latest-prdouct__slider__item">
+              {% for product in last_products|slice:"3:" %}
+              <a href="{% url 'detail' product.slug %}" class="latest-product__item">
+                <div class="latest-product__item__pic">
+                  <img src="{{ product.images.first.image.url }}" alt>
+                </div>
+                <div class="latest-product__item__text">
+                  <h6>{{ product.name }}</h6>
+                  <span>{{ product.discount }}</span>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="latest-product__text">
+          <h4>Top Rated Products</h4>
+          <div class="latest-product__slider owl-carousel">
+            <div class="latest-prdouct__slider__item">
+              {% for product in top_reted_products|slice:"0:3" %}
+              <a href="{% url 'detail' product.slug %}" class="latest-product__item">
+                <div class="latest-product__item__pic">
+                  <img src="{{ product.images.first.image.url }}" alt>
+                </div>
+                <div class="latest-product__item__text">
+                  <h6>{{ product.name }}</h6>
+                  <span>{{ product.discount }}</span>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+            <div class="latest-prdouct__slider__item">
+              {% for product in top_reted_products|slice:"3:" %}
+              <a href="{% url 'detail' product.slug %}" class="latest-product__item">
+                <div class="latest-product__item__pic">
+                  <img src="{{ product.images.first.image.url }}" alt>
+                </div>
+                <div class="latest-product__item__text">
+                  <h6>{{ product.name }}</h6>
+                  <span>{{ product.discount }}</span>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="latest-product__text">
+          <h4>Review Products</h4>
+          <div class="latest-product__slider owl-carousel">
+            <div class="latest-prdouct__slider__item">
+              {% for product in review_products|slice:"0:3" %}
+              <a href="{{ product.get_absolute_url }}" class="latest-product__item">
+                <div class="latest-product__item__pic">
+                  <img src="{{ product.images.first.image.url }}" alt>
+                </div>
+                <div class="latest-product__item__text">
+                  <h6>{{ product.name }}</h6>
+                  <span>{{ product.discount }}</span>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+            <div class="latest-prdouct__slider__item">
+              {% for product in review_products|slice:"3:" %}
+              <a href="{{ product.get_absolute_url }}" class="latest-product__item">
+                <div class="latest-product__item__pic">
+                  <img src="{{ product.images.first.image.url }}" alt>
+                </div>
+                <div class="latest-product__item__text">
+                  <h6>{{ product.name }}</h6>
+                  <span>{{ product.discount }}</span>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="from-blog spad">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="section-title from-blog__title">
+          <h2>From The Blog</h2>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      {% for blog in blogs %}
+      <div class="col-lg-4 col-md-4 col-sm-6">
+        <div class="blog__item">
+          <div class="blog__item__pic">
+            {% if blog.image %}
+            <img src="{{ blog.image.url }}" alt>
+            {% else %}
+            <img src="{% static '' %}img/blog/blog-1.jpg" alt>
+            {% endif %}
+          </div>
+          <div class="blog__item__text">
+            <ul>
+              <li><i class="fa fa-calendar-o"></i>{{ blog.created_at|date }}</li>
+            </ul>
+            <h5><a href="{% url 'blog-detail' blog.slug %}">{{ blog.name|slice:":35" }} ...</a></h5>
+            <p>{{ blog.description|safe|slice:":107" }} ...</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

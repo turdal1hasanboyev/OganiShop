@@ -1,0 +1,15 @@
+{% load static %}
+
+<div class="col-lg-12">
+    <div class="product__pagination blog__pagination">
+        {% if blogs %}
+        <a href="?page=1" class="{% if page_obj.number == 1 %}active{% endif %}">1</a>
+        {% for num in page_obj.paginator.page_range %}
+        <a href="?page={{ num }}" class="{% if page_obj.number == num %}active{% endif %}">{{ num }}</a>
+        {% endfor %}
+        <a href="?page={{ page_obj.paginator.num_pages }}"
+            class="{% if page == page_obj.paginator.num_pages %}active{% endif %}"><i
+                class="fa fa-long-arrow-right"></i></a>
+        {% endif %}
+    </div>
+</div>
