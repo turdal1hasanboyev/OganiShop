@@ -42,7 +42,7 @@ def blog_detail(request, slug):
 
     blog = Blog.objects.get(slug__exact=slug)
 
-    blogs = Blog.objects.all().order_by('-id')[:3]
+    blogs = Blog.objects.all().order_by('-id')
 
     if request.method == "POST":
         email = request.POST.get("subemail")
@@ -60,7 +60,7 @@ def blog_detail(request, slug):
 
     context = { 
         'blog': blog,
-        'blogs': blogs,
+        'blogs': blogs[:3],
     }
 
     return render(request, 'blog-detail.html', context)
