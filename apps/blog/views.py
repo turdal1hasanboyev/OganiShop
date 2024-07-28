@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
-from apps.blog.models import Category, Tag, Blog
-from django.core.paginator import Paginator
+
+from apps.blog.models import Blog
 from apps.common.models import SubEmail
+
+from django.core.paginator import Paginator
 
 
 def blog(request):

@@ -1,4 +1,5 @@
 from django.urls import path
+
 from apps.product.views import index, shop_detail, shop
 from apps.blog.views import blog_detail
 

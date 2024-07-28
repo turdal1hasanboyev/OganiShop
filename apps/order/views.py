@@ -1,6 +1,9 @@
 from django.contrib.auth.decorators import login_required
+
 from django.db.models import Q
+
 from django.shortcuts import redirect, render
+
 from apps.product.models import Product
 from apps.order.models import Cart, CartItem, WishList, Order
 from apps.common.models import SubEmail
@@ -50,11 +53,13 @@ def add_to_wish_list(request, pk):
 def cart(request):
     cat = request.GET.get('cat')
     search = request.GET.get('query')
+
     cart = Cart.objects.filter(session_id=request.session.session_key, is_completed=False).first()
     cart_items = CartItem.objects.filter(cart=cart, order=None, is_active=True)
 
     if request.method == "POST":
         email = request.POST.get("subemail")
+
         SubEmail.objects.create(
             email=email,
         )
@@ -88,6 +93,7 @@ def remove_from_wishlist(request, pk):
 def create_order(request):
     cart = Cart.objects.filter(session_id=request.session.session_key, is_completed=False).first()
     cart_items = CartItem.objects.filter(cart_id=cart.id, order=None, is_active=True)
+
     order = Order.objects.create(user=request.user)
 
     for item in cart_items:
@@ -119,6 +125,7 @@ def checkout(request):
     
     if request.method == "POST":
         email = request.POST.get("subemail")
+
         SubEmail.objects.create(
             email=email,
         )
@@ -142,6 +149,7 @@ def wishlist(request):
 
     if request.method == "POST":
         email = request.POST.get("subemail")
+        
         SubEmail.objects.create(
             email=email,
         )

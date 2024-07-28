@@ -1,4 +1,5 @@
 from django.urls import path
+
 from apps.blog.views import blog, blog_detail
 
 

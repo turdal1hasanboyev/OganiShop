@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
+
 from apps.product.models import Banner, Category, Product
 from apps.blog.models import Blog
-from django.db.models import Q
-from django.core.paginator import Paginator
 from apps.common.models import SubEmail
+
+from django.db.models import Q
+
+from django.core.paginator import Paginator
 
 
 def index(request):
@@ -24,6 +27,7 @@ def index(request):
 
     if request.method == "POST":
         email = request.POST.get("subemail")
+
         SubEmail.objects.create(
             email=email,
         )
@@ -65,6 +69,7 @@ def shop(request):
 
     if request.method == "POST":
         email = request.POST.get("subemail")
+        
         SubEmail.objects.create(
             email=email,
         )
