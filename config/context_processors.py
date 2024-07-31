@@ -1,7 +1,7 @@
+from django.db.models import Q
+
 from apps.product.models import Category, Product
 from apps.order.models import WishList, CartItem, Cart
-
-from django.db.models import Q
 
 
 def objects(request):

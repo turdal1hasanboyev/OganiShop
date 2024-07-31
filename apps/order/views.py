@@ -23,11 +23,13 @@ def add_to_cart(request):
         cart_item = CartItem.objects.filter(cart=cart, product=product).first()
         if cart_item:
             cart_item.quantity = int(quantity)
+
             cart_item.save()
         else:
             CartItem.objects.create(cart=cart, product=product, quantity=quantity)
     else:
         cart = Cart.objects.create(session_id=session_id, ip_address=ip_address)
+
         CartItem.objects.create(cart=cart, product=product, quantity=quantity)
 
     return redirect(url)
@@ -77,6 +79,7 @@ def remove_from_cart(request, pk):
     url = request.META.get('HTTP_REFERER')
 
     cart_item = CartItem.objects.get(id=pk)
+
     cart_item.delete()
 
     return redirect(url)
@@ -85,6 +88,7 @@ def remove_from_wishlist(request, pk):
     url = request.META.get('HTTP_REFERER')
 
     cart_item = WishList.objects.get(id=pk)
+
     cart_item.delete()
     
     return redirect(url)
@@ -98,9 +102,11 @@ def create_order(request):
 
     for item in cart_items:
         item.order = order
+        
         item.save()
 
     cart.is_completed = True
+
     cart.save()
 
     return redirect('checkout')
