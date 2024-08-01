@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 
+from django.core.paginator import Paginator
+
 from apps.blog.models import Blog
 from apps.common.models import SubEmail
-
-from django.core.paginator import Paginator
 
 
 def blog(request):
@@ -16,6 +16,7 @@ def blog(request):
 
     if request.method == "POST":
         email = request.POST.get("subemail")
+
         SubEmail.objects.create(
             email=email,
         )
@@ -48,6 +49,7 @@ def blog_detail(request, slug):
 
     if request.method == "POST":
         email = request.POST.get("subemail")
+
         SubEmail.objects.create(
             email=email,
         )

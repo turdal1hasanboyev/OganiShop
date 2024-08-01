@@ -1,8 +1,7 @@
-from django.contrib.auth.decorators import login_required
-
-from django.db.models import Q
-
 from django.shortcuts import redirect, render
+
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 from apps.product.models import Product
 from apps.order.models import Cart, CartItem, WishList, Order
@@ -21,12 +20,15 @@ def add_to_cart(request):
 
     if cart:
         cart_item = CartItem.objects.filter(cart=cart, product=product).first()
+
         if cart_item:
             cart_item.quantity = int(quantity)
 
             cart_item.save()
+
         else:
             CartItem.objects.create(cart=cart, product=product, quantity=quantity)
+
     else:
         cart = Cart.objects.create(session_id=session_id, ip_address=ip_address)
 
@@ -39,14 +41,19 @@ def add_to_wish_list(request, pk):
 
     if request.user.is_authenticated:
         wishlist = WishList.objects.filter(product_id=pk, user=request.user).first()
+
         if wishlist:
             wishlist.delete()
+
         else:
             WishList.objects.create(product_id=pk, user=request.user)
+
     else:
         wishlist = WishList.objects.filter(product_id=pk, session_id=request.session.session_key).first()
+
         if wishlist:
             wishlist.delete()
+
         else:
             WishList.objects.create(product_id=pk, session_id=request.session.session_key)
 
@@ -125,6 +132,7 @@ def checkout(request):
         order.full_name = full_name
         order.phone = phone
         order.notes = notes
+        
         order.save()
 
         return redirect('index')

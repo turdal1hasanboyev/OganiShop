@@ -12,6 +12,7 @@ def contact(request):
         name = request.POST.get("name")
         email = request.POST.get("email")
         message = request.POST.get("message")
+        
         Contact.objects.create(
             name=name,
             email=email,
@@ -22,6 +23,7 @@ def contact(request):
     
     if request.method == "POST":
         email = request.POST.get("subemail")
+
         SubEmail.objects.create(
             email=email,
         )

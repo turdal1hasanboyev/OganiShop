@@ -6,7 +6,9 @@ from apps.order.models import WishList, CartItem, Cart
 
 def objects(request):
     categories = Category.objects.all().order_by('name')
+
     wishlist_count = 0
+    
     cart = Cart.objects.filter(session_id=request.session.session_key, is_completed=False).first()
     cart_items = CartItem.objects.filter(cart=cart, order=None, is_active=True).count()
     wishlist_count = WishList.objects.filter(Q(session_id=request.session.session_key)).count()
