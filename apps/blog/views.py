@@ -15,10 +15,10 @@ def blog(request):
     blogs = Blog.objects.all()
 
     if request.method == "POST":
-        email = request.POST.get("subemail")
+        sub_email = request.POST.get("subemail")
 
         SubEmail.objects.create(
-            email=email,
+            sub_email=sub_email,
         )
 
         return redirect ('blog')
@@ -32,11 +32,7 @@ def blog(request):
     paginator = Paginator(blogs, 3)
     selected_page = paginator.get_page(page)
 
-    context = {
-        'blogs': selected_page,
-    }
-
-    return render(request, 'blog.html', context)
+    return render(request, 'blog.html', {'blogs': selected_page})
 
 def blog_detail(request, slug):
     tag = request.GET.get('tag')
@@ -45,13 +41,13 @@ def blog_detail(request, slug):
 
     blog = Blog.objects.get(slug__exact=slug)
 
-    blogs = Blog.objects.all().order_by('-id')
+    blogs = Blog.objects.all()
 
     if request.method == "POST":
-        email = request.POST.get("subemail")
+        sub_email = request.POST.get("subemail")
 
         SubEmail.objects.create(
-            email=email,
+            sub_email=sub_email,
         )
 
         return redirect ('blog', blog.slug)
@@ -64,7 +60,7 @@ def blog_detail(request, slug):
 
     context = { 
         'blog': blog,
-        'blogs': blogs[:3],
+        'blogs': blogs.order_by('-id')[:3],
     }
 
     return render(request, 'blog-detail.html', context)

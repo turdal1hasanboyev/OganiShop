@@ -5,9 +5,9 @@ from apps.common.models import BaseModel
 
 class Contact(BaseModel):
     name = models.CharField(max_length=225, null=True, blank=True)
-    email = models.EmailField(null=True, blank=True)   
+    email = models.EmailField(null=True, blank=True, unique=True)   
     message = models.TextField(null=True, blank=True) 
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
     

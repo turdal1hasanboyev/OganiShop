@@ -1,8 +1,11 @@
 from django.db import models
 
 from django.core.validators import MinValueValidator, MaxValueValidator
+
 from django.contrib.auth.models import User
+
 from ckeditor.fields import RichTextField
+
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 
@@ -10,7 +13,7 @@ from apps.common.models import BaseModel
 
 
 class Category(BaseModel):
-    name = models.CharField(max_length=225)
+    name = models.CharField(max_length=225, null=True, blank=True)
     image = models.ImageField(upload_to="cats/", null=True, blank=True)
     slug = models.SlugField(unique=True, null=True, blank=True, max_length=225)
 
@@ -20,12 +23,12 @@ class Category(BaseModel):
 
         return super().save(*args, **kwargs)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
 class Tag(BaseModel):
-    name = models.CharField(max_length=225)
+    name = models.CharField(max_length=225, null=True, blank=True)
     slug = models.SlugField(unique=True, null=True, blank=True, max_length=225)
 
     def save(self, *args, **kwargs):  
@@ -34,13 +37,13 @@ class Tag(BaseModel):
 
         return super().save(*args, **kwargs)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
 class Banner(BaseModel):
-    name = models.CharField(max_length=225)
-    image = models.ImageField(upload_to='banners/')
+    name = models.CharField(max_length=225, null=True, blank=True)
+    image = models.ImageField(upload_to='banners/', null=True, blank=True)
     description = RichTextField(null=True, blank=True)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE,
@@ -53,17 +56,17 @@ class Banner(BaseModel):
         limit_choices_to={"parent__isnull": True},
         related_name="children")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
 class Product(BaseModel):
-    name = models.CharField(max_length=225)
+    name = models.CharField(max_length=225, null=True, blank=True)
     slug = models.SlugField(unique=True, null=True, blank=True, max_length=225)
     banner = models.ForeignKey(Banner, on_delete=models.SET_NULL, null=True, blank=True)
     description = RichTextField(null=True, blank=True)
-    views = models.IntegerField(default=0)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    views = models.IntegerField(default=0, null=True, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     percentage = models.IntegerField(null=True, blank=True)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE,
@@ -78,7 +81,7 @@ class Product(BaseModel):
 
         return super().save(*args, **kwargs)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
     
     def get_absolute_url(self):
@@ -105,11 +108,11 @@ class Product(BaseModel):
 
 
 class ProductImage(BaseModel):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='products')
-    is_featured = models.BooleanField(default=False)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', null=True, blank=True)
+    image = models.ImageField(upload_to='products', null=True, blank=True)
+    is_featured = models.BooleanField(default=False, null=True, blank=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.product.name
 
 
@@ -117,7 +120,7 @@ class Rate(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, related_name='rates')
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     message = models.CharField(max_length=225, null=True, blank=True)
-    rate = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
+    rate = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.user.get_full_name} - {self.rate} - {self.product.name}"

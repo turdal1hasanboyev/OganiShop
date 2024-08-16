@@ -22,10 +22,10 @@ def contact(request):
         return redirect('contact')
     
     if request.method == "POST":
-        email = request.POST.get("subemail")
+        sub_email = request.POST.get("subemail")
 
         SubEmail.objects.create(
-            email=email,
+            sub_email=sub_email,
         )
 
         return redirect ('contact')

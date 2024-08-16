@@ -10,16 +10,20 @@ from apps.common.models import SubEmail
 
 def add_to_cart(request):
     url = request.META.get('HTTP_REFERER')
+
     product_id = request.POST.get('product_id')
     quantity = request.POST.get('quantity')
+
     session_id = request.session.session_key
+
     ip_address = request.META.get('REMOTE_ADDR')
 
     cart = Cart.objects.filter(session_id=session_id, is_completed=False).first()
+
     product = Product.objects.get(id=int(product_id))
 
     if cart:
-        cart_item = CartItem.objects.filter(cart=cart, product=product).first()
+        cart_item = CartItem.objects.filter(cart_id=cart.id, product_id=product.id).first()
 
         if cart_item:
             cart_item.quantity = int(quantity)
@@ -27,12 +31,12 @@ def add_to_cart(request):
             cart_item.save()
 
         else:
-            CartItem.objects.create(cart=cart, product=product, quantity=quantity)
+            CartItem.objects.create(cart_id=cart.id, product_id=product.id, quantity=quantity)
 
     else:
         cart = Cart.objects.create(session_id=session_id, ip_address=ip_address)
 
-        CartItem.objects.create(cart=cart, product=product, quantity=quantity)
+        CartItem.objects.create(cart_id=cart.id, product_id=product.id, quantity=quantity)
 
     return redirect(url)
 
@@ -40,13 +44,13 @@ def add_to_wish_list(request, pk):
     url = request.META.get('HTTP_REFERER')
 
     if request.user.is_authenticated:
-        wishlist = WishList.objects.filter(product_id=pk, user=request.user).first()
+        wishlist = WishList.objects.filter(product_id=pk, user_id=request.user.id).first()
 
         if wishlist:
             wishlist.delete()
 
         else:
-            WishList.objects.create(product_id=pk, user=request.user)
+            WishList.objects.create(product_id=pk, user_id=request.user.id)
 
     else:
         wishlist = WishList.objects.filter(product_id=pk, session_id=request.session.session_key).first()
@@ -64,14 +68,12 @@ def cart(request):
     search = request.GET.get('query')
 
     cart = Cart.objects.filter(session_id=request.session.session_key, is_completed=False).first()
-    cart_items = CartItem.objects.filter(cart=cart, order=None, is_active=True)
+    cart_items = CartItem.objects.filter(cart_id=cart.id, order=None)
 
     if request.method == "POST":
-        email = request.POST.get("subemail")
+        sub_email = request.POST.get("subemail")
 
-        SubEmail.objects.create(
-            email=email,
-        )
+        SubEmail.objects.create(sub_email=sub_email)
 
         return redirect ('cart')
 
@@ -103,9 +105,9 @@ def remove_from_wishlist(request, pk):
 @login_required
 def create_order(request):
     cart = Cart.objects.filter(session_id=request.session.session_key, is_completed=False).first()
-    cart_items = CartItem.objects.filter(cart_id=cart.id, order=None, is_active=True)
+    cart_items = CartItem.objects.filter(cart_id=cart.id, order=None)
 
-    order = Order.objects.create(user=request.user)
+    order = Order.objects.create(user_id=request.user.id)
 
     for item in cart_items:
         item.order = order
@@ -122,11 +124,12 @@ def create_order(request):
 def checkout(request):
     cat = request.GET.get('cat')
     search = request.GET.get('query')
+
     full_name = request.POST.get('full_name', None)
     phone = request.POST.get('phone', None)
     notes = request.POST.get('notes', None)
 
-    order = Order.objects.filter(user=request.user).last()
+    order = Order.objects.filter(user_id=request.user.id).last()
     
     if request.method == 'POST':
         order.full_name = full_name
@@ -138,19 +141,15 @@ def checkout(request):
         return redirect('index')
     
     if request.method == "POST":
-        email = request.POST.get("subemail")
+        sub_email = request.POST.get("subemail")
 
         SubEmail.objects.create(
-            email=email,
+            sub_email=sub_email,
         )
 
         return redirect ('checkout')
 
-    context = {
-        "order": order,
-    }
-
-    return render(request, 'checkout.html', context)
+    return render(request, 'checkout.html', {"order": order})
 
 def wishlist(request):
     cat = request.GET.get('cat')
@@ -159,19 +158,15 @@ def wishlist(request):
     wishlist = WishList.objects.filter(session_id=request.session.session_key)
 
     if request.user.is_authenticated:
-        wishlist = WishList.objects.filter(Q(user=request.user) | Q(session_id=request.session.session_key))
+        wishlist = WishList.objects.filter(Q(user_id=request.user.id) | Q(session_id=request.session.session_key))
 
     if request.method == "POST":
-        email = request.POST.get("subemail")
+        sub_email = request.POST.get("subemail")
         
         SubEmail.objects.create(
-            email=email,
+            sub_email=sub_email,
         )
 
         return redirect ('wishlist')
 
-    context = {
-        "wishlist": wishlist,
-    }
-
-    return render(request, 'wishlist.html', context)
+    return render(request, 'wishlist.html', {"wishlist": wishlist})

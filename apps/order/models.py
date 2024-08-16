@@ -14,26 +14,26 @@ STATUS = (
 
 
 class Order(BaseModel):
-    status = models.IntegerField(choices=STATUS, default=0)
+    status = models.IntegerField(choices=STATUS, default=0, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="orders")
     phone = models.CharField(max_length=225, null=True, blank=True)
     full_name = models.CharField(max_length=225, null=True, blank=True)
-    notes = models.CharField(max_length=255, null=True, blank=True)
+    notes = models.CharField(max_length=225, null=True, blank=True)
 
     @property
     def total(self):
         return sum([item.total for item in self.items.all()])
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.user.username} - {self.status}'
 
 
 class Cart(BaseModel):
-    is_completed = models.BooleanField(default=False)
-    session_id = models.CharField(max_length=100)
+    is_completed = models.BooleanField(default=False, null=True, blank=True)
+    session_id = models.CharField(max_length=225, null=True, blank=True)
     ip_address = models.GenericIPAddressField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.session_id
 
     @property
@@ -56,10 +56,10 @@ class Cart(BaseModel):
 
 
 class CartItem(BaseModel):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items')
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items', null=True, blank=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True, related_name='items')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+    quantity = models.IntegerField(default=1, null=True, blank=True)
 
     @property
     def total(self):
@@ -69,14 +69,14 @@ class CartItem(BaseModel):
     def main_total(self):
         return self.product.price * self.quantity
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.product.name}'
 
 
 class WishList(BaseModel):
-    session_id = models.CharField(max_length=100, null=True)
+    session_id = models.CharField(max_length=225, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.product.name

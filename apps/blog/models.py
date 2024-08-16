@@ -1,7 +1,9 @@
 from django.db import models
 
 from django.contrib.auth.models import User
+
 from ckeditor.fields import RichTextField
+
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 
@@ -9,7 +11,7 @@ from apps.common.models import BaseModel
 
 
 class Category(BaseModel):
-    name = models.CharField(max_length=225)
+    name = models.CharField(max_length=225, null=True, blank=True)
     slug = models.SlugField(unique=True, null=True, blank=True, max_length=225)
 
     def save(self, *args, **kwargs):  
@@ -18,12 +20,12 @@ class Category(BaseModel):
 
         return super().save(*args, **kwargs)
     
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
     
 
 class Tag(BaseModel):
-    name = models.CharField(max_length=225)
+    name = models.CharField(max_length=225, null=True, blank=True)
     slug = models.SlugField(unique=True, null=True, blank=True, max_length=225)
 
     def save(self, *args, **kwargs):  
@@ -32,18 +34,18 @@ class Tag(BaseModel):
 
         return super().save(*args, **kwargs)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
 class Blog(BaseModel):
-    name = models.CharField(max_length=225)
+    name = models.CharField(max_length=225, null=True, blank=True)
     slug = models.SlugField(unique=True, null=True, blank=True, max_length=225)
     description = RichTextField(null=True, blank=True)
     image = models.ImageField(upload_to='blogs/', null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
-    avtor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     
     def save(self, *args, **kwargs):  
         if not self.slug:
@@ -54,6 +56,6 @@ class Blog(BaseModel):
     def get_absolute_url(self):
         return reverse("blog-detail", kwargs={"slug": self.slug})
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
     
