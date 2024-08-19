@@ -1,4 +1,4 @@
-from apps.blog.models import Tag, Blog, Category
+from .models import Tag, Blog, Category
 
 
 def blog_contexts(request):

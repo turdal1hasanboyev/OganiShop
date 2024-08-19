@@ -20,7 +20,7 @@ class Category(BaseModel):
 
         return super().save(*args, **kwargs)
     
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
     
 
@@ -34,7 +34,7 @@ class Tag(BaseModel):
 
         return super().save(*args, **kwargs)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
 
 
@@ -56,6 +56,6 @@ class Blog(BaseModel):
     def get_absolute_url(self):
         return reverse("blog-detail", kwargs={"slug": self.slug})
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
     

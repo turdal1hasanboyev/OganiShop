@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from apps.contact.models import Contact
+from .models import Contact
 from apps.common.models import SubEmail
 
 

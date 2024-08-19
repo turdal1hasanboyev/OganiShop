@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
 from apps.product.models import Product
-from apps.order.models import Cart, CartItem, WishList, Order
+from .models import Cart, CartItem, WishList, Order
 from apps.common.models import SubEmail
 
 

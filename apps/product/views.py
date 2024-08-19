@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.core.paginator import Paginator
 
-from apps.product.models import Banner, Category, Product
+from .models import Banner, Category, Product
 from apps.blog.models import Blog
 from apps.common.models import SubEmail
 

@@ -2,7 +2,7 @@ from django import forms
 
 from ckeditor.widgets import CKEditorWidget
 
-from apps.blog.models import Blog
+from .models import Blog
 
 
 class BlogAdminForm(forms.ModelForm):

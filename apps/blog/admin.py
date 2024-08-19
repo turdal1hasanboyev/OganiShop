@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from apps.blog.forms import BlogAdminForm
-from apps.blog.models import Blog, Category, Tag
+from .forms import BlogAdminForm
+from .models import Blog, Category, Tag
 
 
 @admin.register(Blog)

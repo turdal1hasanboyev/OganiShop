@@ -23,7 +23,7 @@ class Category(BaseModel):
 
         return super().save(*args, **kwargs)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
 
 
@@ -37,7 +37,7 @@ class Tag(BaseModel):
 
         return super().save(*args, **kwargs)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
 
 
@@ -56,7 +56,7 @@ class Banner(BaseModel):
         limit_choices_to={"parent__isnull": True},
         related_name="children")
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
 
 
@@ -81,7 +81,7 @@ class Product(BaseModel):
 
         return super().save(*args, **kwargs)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
     
     def get_absolute_url(self):
@@ -112,7 +112,7 @@ class ProductImage(BaseModel):
     image = models.ImageField(upload_to='products', null=True, blank=True)
     is_featured = models.BooleanField(default=False, null=True, blank=True)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.product.name
 
 
@@ -122,5 +122,5 @@ class Rate(BaseModel):
     message = models.CharField(max_length=225, null=True, blank=True)
     rate = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return f"{self.user.get_full_name} - {self.rate} - {self.product.name}"

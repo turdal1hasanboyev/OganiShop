@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 
 from django.core.paginator import Paginator
 
-from apps.blog.models import Blog
+from .models import Blog
 from apps.common.models import SubEmail
 
 

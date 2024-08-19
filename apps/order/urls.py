@@ -1,6 +1,6 @@
 from django.urls import path
 
-from apps.order.views import add_to_cart, add_to_wish_list, cart, remove_from_cart, create_order, checkout, wishlist, remove_from_wishlist
+from .views import add_to_cart, add_to_wish_list, cart, remove_from_cart, create_order, checkout, wishlist, remove_from_wishlist
 
 
 urlpatterns = [
